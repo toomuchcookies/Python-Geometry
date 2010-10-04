@@ -1,4 +1,5 @@
 from math import pi, sqrt, acos, cos, sin
+import numpy as np
 
 class Point:
 	def __init__(self, x, y, z):
@@ -18,6 +19,10 @@ class Point:
 	
 	def dot(self, other):
 		return (self.x*other.x + self.y*other.y + self.z*other.z)
+		
+	def transform(self, T):
+		t = [self.x, self.y, self.z, 1]
+		return T*t
 	
 	def __sub__(self,other):
 		return Point(self.x - other.x, self.y - other.y, self.z - other.z)
@@ -85,7 +90,6 @@ class Line:
 		u = vec.dot(to - P)/vec.dot(vec)
 		return (P + u*vec)
 
-	
 	def __repr__(self):
 		return "Line(" + repr(self.P) + ", " + repr(self.vec) + ")"
 		
