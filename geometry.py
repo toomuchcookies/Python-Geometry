@@ -21,8 +21,12 @@ class Point:
 		return (self.x*other.x + self.y*other.y + self.z*other.z)
 		
 	def transform(self, T):
-		t = [self.x, self.y, self.z, 1]
-		return T*t
+		t = [[self.x], [self.y], [self.z], [1]]
+		t = T*t
+		return Point(t[0,0],t[1,0],t[2,0])
+		
+	def aslist(self):
+		return [self.x, self.y, self.z]
 	
 	def __sub__(self,other):
 		return Point(self.x - other.x, self.y - other.y, self.z - other.z)
