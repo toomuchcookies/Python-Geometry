@@ -324,6 +324,46 @@ class Line:
             return self.lineintersect(other)
         else:
             return None
+    
+    def rotatearound(self,points,theta):
+        """ rotate points around self with the angle theta
+        
+        Assume points is a Point or a list of Points
+        """
+        theta = pi*theta/180
+        if isinstance(points,Point):
+            points = [points]
+        # Translate so axis is at origin
+        for i in range(len(points)):
+            points[i] = points[i] - self.P
+        # Matrix common factors     
+        c = cos(theta)
+        t = (1 - cos(theta))
+        s = sin(theta)
+        X = self.vec.x
+        Y = self.vec.y
+        Z = self.vec.z
+        # Matrix 'M'
+        d11 = t*X**2 + c
+        d12 = t*X*Y - s*Z
+        d13 = t*X*Z + s*Y
+        d21 = t*X*Y + s*Z
+        d22 = t*Y**2 + c
+        d23 = t*Y*Z - s*X
+        d31 = t*X*Z - s*Y
+        d32 = t*Y*Z + s*X
+        d33 = t*Z**2 + c
+        
+        #            |p.x|
+        # Matrix 'M'*|p.y|
+        #            |p.z|
+        rpoints = []
+        for i in range(len(points)):
+            nx = d11*points[i].x + d12*points[i].y + d13*points[i].z
+            ny = d21*points[i].x + d22*points[i].y + d23*points[i].z
+            nz = d31*points[i].x + d32*points[i].y + d33*points[i].z
+            rpoints.append(Point(nx,ny,nz)+self.P)
+        return rpoints
             
     def transform(self, T):
         """ Line t = T * self,  
@@ -444,8 +484,6 @@ class Plane:
         norm = self.N.transformNoTranslation(T).normalized()
 
         self.fromPointNorm(pointOnSelf, norm)        
-        
-
 
     def planeintersect(self, other):
         """ returns line of intersection of this plane and another
@@ -482,9 +520,6 @@ class Plane:
                     x = la.solve(A,b)
                     p = Point(x[0],x[1],0)
                     return Line(p, v)
-                    
-                
-            
 
     def lineintersect(self,other):
         """    Point p = intersection of self (Plane) and other (Line)
