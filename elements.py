@@ -2,7 +2,8 @@
 
 """
 Created: 2011-01-26
-Authors: Omar Abo-Namous, Andreas Poesch
+Last Modified: 2011-02-14
+Authors: Omar Abo-Namous, Andreas Poesch, Moritz Krauss
 """
 
 
